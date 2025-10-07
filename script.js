@@ -42,8 +42,8 @@ for (let i = 0; i < 2; i++) {
 
 const daysLeft = document.createElement("h3");
 
-const birthdayDate = new Date("2025-12-14");
-birthdayDate.setHours(0, 0, 0);
+const birthdayDate = new Date("2025-10-07");
+birthdayDate.setHours(11, 36, 0);
 const limitDate = document.createElement("h3");
 limitDate.textContent = `${birthdayDate.toLocaleDateString()}`;
 sectionElement.appendChild(limitDate);
