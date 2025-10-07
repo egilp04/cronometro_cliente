@@ -42,8 +42,8 @@ for (let i = 0; i < 2; i++) {
 
 const daysLeft = document.createElement("h3");
 
-const birthdayDate = new Date("2025-10-07");
-birthdayDate.setHours(11, 36, 0);
+const birthdayDate = new Date("2025-12-13");
+birthdayDate.setHours(0, 0, 0);
 const limitDate = document.createElement("h3");
 limitDate.textContent = `${birthdayDate.toLocaleDateString()}`;
 sectionElement.appendChild(limitDate);
@@ -124,7 +124,7 @@ function counter() {
     } else if (counterMonths <= 0 && counterDays < 7) {
       table.style.color = "#ef4444";
     } else {
-      table.style.color = "#fbbf24";
+      table.style.color = "#dd8512ff";
     }
     currentDate = new Date(currentDate.getTime() + timeToChange);
   } else {
