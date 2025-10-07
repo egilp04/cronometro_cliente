@@ -65,22 +65,15 @@ let minDate = `${minYear}-${minMonth}-${minDay}`;
 inputDate.setAttribute("min", minDate);
 
 const timeToChange = 1000;
-
 counter();
 
 function counter() {
-  let counterDays = 0;
   let counterMonths = 0;
+  let counterDays = 0;
   let counterHours = 0;
   let counterMinutes = 0;
   let counterSeconds = 0;
-
   daysLeft.textContent = ``;
-
-  let birthYear = birthdayDate.getFullYear();
-  let currentYear = currentDate.getFullYear();
-  let birthMonth = birthdayDate.getMonth();
-  let currentMonth = currentDate.getMonth();
 
   const monthColumn = document.getElementById("monthsColumn");
   const daysColumn = document.getElementById("daysColumn");
@@ -89,32 +82,15 @@ function counter() {
   const secondsColumn = document.getElementById("secondsColumn");
 
   if (currentDate <= birthdayDate) {
-    let monthsLeft = (birthYear - currentYear) * 12 + birthMonth - currentMonth;
-    if (currentDate.getDate() > birthdayDate.getDate()) {
-      monthsLeft--;
-    }
-    if (monthsLeft < 0) {
-      monthsLeft = 0;
-    }
-    counterMonths = monthsLeft;
+    differenceBetweenDates = getDifferences();
+    counterMonths =
+      differenceBetweenDates.year * 12 + differenceBetweenDates.month;
+    counterDays = differenceBetweenDates.day;
+    counterHours = differenceBetweenDates.hour;
+    counterMinutes = differenceBetweenDates.minute;
+    counterSeconds = differenceBetweenDates.second;
+    differenceDate = birthdayDate - currentDate;
 
-    if (currentDate.getDate() < birthdayDate.getDate()) {
-      counterDays = birthdayDate.getDate() - currentDate.getDate();
-    } else {
-      const dayInMonth = new Date(birthYear, birthMonth, 0).getDate();
-      counterDays = dayInMonth - currentDate.getDate() + birthdayDate.getDate();
-    }
-
-    counterHours = 24 - currentDate.getHours();
-    if (counterHours > 0) counterDays--;
-
-    counterMinutes = 60 - currentDate.getMinutes();
-    if (counterMinutes > 0) counterHours--;
-
-    counterSeconds = 60 - currentDate.getSeconds();
-    if (counterSeconds > 0) counterMinutes--;
-
-    let differenceDate = birthdayDate - currentDate;
     if (differenceDate <= 0) {
       clearInterval(intervalDate);
     }
@@ -162,3 +138,38 @@ inputDate.addEventListener("change", (e) => {
 
   counter();
 });
+
+function getDifferences() {
+  let month = birthdayDate.getMonth() - currentDate.getMonth();
+  let day = birthdayDate.getDate() - currentDate.getDate();
+  let hour = birthdayDate.getHours() - currentDate.getHours();
+  let minute = birthdayDate.getMinutes() - currentDate.getMinutes();
+  let second = birthdayDate.getSeconds() - currentDate.getSeconds();
+
+  if (second < 0) {
+    minute--;
+    second += 60;
+  }
+  if (minute < 0) {
+    hour--;
+    minute += 60;
+  }
+  if (hour < 0) {
+    day--;
+    hour += 24;
+  }
+  if (day < 0) {
+    month--;
+    const daysInPreviousMonth = new Date(
+      birthdayDate.getFullYear(),
+      birthdayDate.getMonth(),
+      0
+    ).getDate();
+    day += daysInPreviousMonth;
+  }
+  if (month < 0) {
+    month += 12;
+  }
+
+  return { month, day, hour, minute, second };
+}
