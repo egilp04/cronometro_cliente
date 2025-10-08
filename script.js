@@ -83,7 +83,8 @@ function counter() {
 
   if (currentDate <= birthdayDate) {
     differenceBetweenDates = getDifferences();
-    counterMonths = differenceBetweenDates.month;
+    counterMonths =
+      differenceBetweenDates.year * 12 + differenceBetweenDates.month;
     counterDays = differenceBetweenDates.day;
     counterHours = differenceBetweenDates.hour;
     counterMinutes = differenceBetweenDates.minute;
@@ -139,6 +140,7 @@ inputDate.addEventListener("change", (e) => {
 });
 
 function getDifferences() {
+  let year = birthdayDate.getFullYear() - currentDate.getFullYear();
   let month = birthdayDate.getMonth() - currentDate.getMonth();
   let day = birthdayDate.getDate() - currentDate.getDate();
   let hour = birthdayDate.getHours() - currentDate.getHours();
@@ -169,5 +171,5 @@ function getDifferences() {
   if (month < 0) {
     month += 12;
   }
-  return { month, day, hour, minute, second };
+  return { year, month, day, hour, minute, second };
 }
