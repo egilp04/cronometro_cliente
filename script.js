@@ -104,11 +104,6 @@ function counter() {
     currentDate = new Date(currentDate.getTime() + timeToChange);
   } else {
     table.style.color = "#ef4444";
-    counterDays = 0;
-    counterMonths = 0;
-    counterHours = 0;
-    counterMinutes = 0;
-    counterSeconds = 0;
     daysLeft.style.color = "#ef4444";
     daysLeft.textContent = `La fecha actual no puede ser mayor que la fecha máxima`;
   }
