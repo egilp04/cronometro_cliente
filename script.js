@@ -22,22 +22,22 @@ const tableTitles = ["Meses", "Días", "Horas", "Minutos", "Segundos"];
 const tableElements = ["months", "days", "hours", "minutes", "seconds"];
 
 for (let i = 0; i < 2; i++) {
-  const file = document.createElement("tr");
+  const row = document.createElement("tr");
   if (i == 0) {
     for (let j = 0; j < 5; j++) {
       const column = document.createElement("th");
       column.textContent = `${tableTitles[j]}`;
-      file.appendChild(column);
+      row.appendChild(column);
     }
   } else {
     for (let j = 0; j < 5; j++) {
       const column = document.createElement("td");
       column.setAttribute("id", `${tableElements[j]}Column`);
       column.textContent = "0";
-      file.appendChild(column);
+      row.appendChild(column);
     }
   }
-  table.appendChild(file);
+  table.appendChild(row);
 }
 
 const daysLeft = document.createElement("h3");
@@ -46,7 +46,6 @@ const birthdayDate = new Date("2025-12-13");
 birthdayDate.setHours(0, 0, 0);
 const limitDate = document.createElement("h3");
 limitDate.textContent = `${birthdayDate.toLocaleDateString()}`;
-sectionElement.appendChild(limitDate);
 
 sectionElement.appendChild(title);
 sectionElement.appendChild(subtitle);
@@ -57,6 +56,7 @@ sectionElement.appendChild(inputDate);
 
 let dateNow = new Date();
 let currentDate = new Date();
+let selectedDate = null;
 
 let minDay = String(dateNow.getDate()).padStart(2, "0");
 let minMonth = String(dateNow.getMonth() + 1).padStart(2, "0");
@@ -68,6 +68,13 @@ const timeToChange = 1000;
 counter();
 
 function counter() {
+  const now = new Date();
+  if (selectedDate) {
+    currentDate = new Date(selectedDate);
+    currentDate.setHours(now.getHours(), now.getMinutes(), 0, 0);
+  } else {
+    currentDate = new Date();
+  }
   let counterMonths = 0;
   let counterDays = 0;
   let counterHours = 0;
@@ -101,7 +108,6 @@ function counter() {
     } else {
       table.style.color = "#dd8512ff";
     }
-    currentDate = new Date(currentDate.getTime() + timeToChange);
   } else {
     table.style.color = "#ef4444";
     daysLeft.style.color = "#ef4444";
@@ -121,15 +127,14 @@ const intervalDate = setInterval(() => {
 
 inputDate.addEventListener("change", (e) => {
   let dateString = e.target.value;
-  currentDate = new Date(dateString);
+  selectedDate = new Date(dateString);
   const now = new Date();
-  currentDate.setHours(
-    now.getHours(),
-    now.getMinutes(),
-    now.getSeconds(),
-    now.getMilliseconds()
-  );
-
+  selectedDate.setHours(now.getHours(), now.getMinutes(), 0, 0);
+  if (selectedDate > birthdayDate) {
+    daysLeft.textContent =
+      "La fecha no puede ser mayor a la fecha del cumpleaños.";
+    return;
+  }
   counter();
 });
 
@@ -166,5 +171,9 @@ function getDifferences() {
   if (month < 0) {
     month += 12;
   }
-  return { month, day, hour, minute, second };
+  if (birthdayDate - currentDate <= 0) {
+    return { month: 0, day: 0, hour: 0, minute: 0, second: 0 };
+  } else {
+    return { month, day, hour, minute, second };
+  }
 }
